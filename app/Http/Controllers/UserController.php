@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -60,8 +61,13 @@ class UserController extends Controller
     public function destroy(Request $request, $id) {
         $user = User::findOrFail($id);
 
+        if (Auth::user()->id == $user->id && Auth::user()->role == 'Admin') {
+            return back()->with('error', 'Admin tidak dapat menghapus akun mereka sendiri.');
+        }
+
         $user->delete();
 
-        return back()->with('succes', 'Data user berhasil dihapus');
+        return back()->with('success', 'Data user berhasil dihapus');
     }
+
 }

@@ -3,8 +3,8 @@
 @section('content')
 <div class="p-6">
     <x-breadcrumb title="Penjualan" :paths="[
-            ['name' => 'Home', 'url' => ''],
-            ['name' => 'Data Penjualan', 'url' => ''],
+            ['name' => 'Home', 'url' => '/dashboard'],
+            ['name' => 'Data Penjualan', 'url' => route('sale.index')],
             ['name' => 'Member', 'url' => ''],
         ]" />
 
@@ -23,25 +23,31 @@
                         </tr>
                     </thead>
                     {{-- Tampilkan data produk --}}
-                    
+                    @foreach ($details as $detail)
                     <tbody>
                         <tr class="border-t border-b">
-                            <td class="p-3">[Nama Produk]</td>
-                            <td class="p-3 text-center">[Quantity Produk]</td>
-                            <td class="p-3 text-right">Rp[Harga Produk]</td>
-                            <td class="p-3 text-right">Rp[Sub Total]</td>
+                            <td class="p-3">{{ $detail->product->name }}</td>
+                            <td class="p-3 text-center">{{ $detail->quantity }}</td>
+                            <td class="p-3 text-right">Rp{{ number_format($detail->product->price,0,',','.') }}</td>
+                            <td class="p-3 text-right">Rp{{ number_format($detail->product->price *
+                                $detail->quantity,0,',','.') }}</td>
                         </tr>
                     </tbody>
-                    
+                    @endforeach
                 </table>
                 <div class="mt-6 space-y-3">
+                    @php
+                    $totalHarga = collect($details)->sum(function($item) {
+                    return $item->product->price * $item->quantity;
+                    });
+                    @endphp
                     <div class="flex justify-between text-md font-semibold text-gray-800">
                         <span>Total Harga</span>
-                        <span>Rp[Total harga keseluruhan produk yang dibeli]</span>
+                        <span>Rp{{ number_format($totalHarga, 0,',','.') }}</span>
                     </div>
                     <div class="flex justify-between text-xl font-semibold text-gray-800">
                         <span>Total Bayar</span>
-                        <span>Rp[Total bayar]</span>
+                        <span>Rp{{ number_format($sales->total_pay, 0,',','.') }}</span>
                     </div>
                 </div>
                 {{-- @endif --}}
@@ -52,13 +58,15 @@
 
         <!-- Bagian Kanan: Form Member -->
         <div class="w-1/2">
-            <form action="/sale member save, id" method="POST" class="space-y-4">
+            <form action="{{ route('sale.member.save', ['id' => $sales->id]) }}" method="POST" class="space-y-4">
+                @csrf
+                @method('POST')
                 <!-- Nama Member -->
                 <div class="flex flex-col space-y-1">
                     <label class="text-sm text-gray-600" for="memberName">Nama Member (Identitas)</label>
                     <input type="text" id="memberName" name="name"
                         class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:outline-none focus:ring-gray-400"
-                        value="" required>
+                        value="{{ $customers->name ?? '' }}" required>
                 </div>
 
                 <!-- Poin -->
@@ -66,7 +74,7 @@
                     <label class="text-sm text-gray-600" for="poin">Poin</label>
                     <input type="text" id="poin"
                         class="w-full border border-gray-300 bg-gray-200 text-gray-500 rounded-md p-2"
-                        value="" readonly disabled>
+                        value="{{ $customers->point ?? 0 }}" readonly disabled>
                 </div>
 
                 <!-- Gunakan Poin -->

@@ -17,15 +17,15 @@ class Sale extends Model
         'point',
         'total_point',
         'customer_id',
-        'product_id'
+        'user_id'
     ];
 
     public function customer() {
         return $this->belongsTo(Customer::class);
     }
 
-    public function product() {
-        return $this->belongsTo(Product::class);
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
     public function detailSales() {

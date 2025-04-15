@@ -20,19 +20,19 @@
                 <div class="bg-white border-gray-100 shadow-black/5 p-6 rounded-md shadow-md">
                     <div class="flex flex-col space-y-2">
                         <h1 class="text-xl font-semibold mr-2">Produk: </h1>
-                        <h4 class="text-2xl font-semibold text-textColor">100</h4>
+                        <h4 class="text-2xl font-semibold text-textColor">{{ $products }}</h4>
                     </div>
                 </div>
                 <div class="bg-white border-gray-100 shadow-black/5 p-6 rounded-md shadow-md">
                     <div class="flex flex-col space-y-2">
                         <h1 class="text-xl font-semibold mr-2">User:</h1>
-                        <h4 class="text-2xl font-semibold text-textColor">5</h4>
+                        <h4 class="text-2xl font-semibold text-textColor">{{ $users }}</h4>
                     </div>
                 </div>
                 <div class="bg-white border-gray-100 shadow-black/5 p-6 rounded-md shadow-md">
                     <div class="flex flex-col space-y-2">
                         <h1 class="text-xl font-semibold">Penjualan:</h1>
-                        <h4 class="text-2xl font-semibold text-textColor">5000</h4>
+                        <h4 class="text-2xl font-semibold text-textColor">{{ $sales }}</h4>
                     </div>
                 </div>
             </div>
@@ -44,11 +44,11 @@
                     <h1 class="text-xl font-semibold mr-2">Total Penjualan Hari Ini</h1>
                 </div>
                 <div class="mt-8">
-                    <p class="text-2xl font-semibold">100</p>
+                    <p class="text-2xl font-semibold">{{ $sales }}</p>
                     <p class="text-gray-500">Jumlah total penjualan yang terjadi hari ini.</p>
                 </div>
                 <div class="bg-gray-100 mt-8 p-4 rounded-lg">
-                    <h1 class=" text-gray-500">Terakhir diperbarui: 24 Feb 2025 05:37</h1>
+                    <h1 class=" text-gray-500">Terakhir diperbarui: {{ now() }}</h1>
                 </div>
             </div>
 

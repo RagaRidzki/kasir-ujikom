@@ -24,40 +24,50 @@
             <h1 class="text-xl font-semibold mb-2">Produk yang dipilih</h1>
 
             {{-- start: looping produk dari session --}}
-            <p>[Nama Produk]</p>
+            @if (!empty($cart))
+            @foreach ($cart as $product)
+            <p>{{ $product['name'] }}</p>
             <div class="flex justify-between mb-6">
-                <p class="text-gray-600">[Harga X Quantity]</p>
-                <p class="font-semibold text-gray-700">Rp[Harga * Quantity]</p>
+                <p class="text-gray-600">Rp{{ number_format($product['price'], 0, ',', '.') }} X {{ $product['quantity'] }}</p>
+                <p class="font-semibold text-gray-700">Rp{{ number_format($product['price'] * $product['quantity'], 0,
+                    ',', '.') }}</p>
             </div>
+            @endforeach
             <div class="flex justify-between">
                 <h1 class="text-xl font-semibold text-gray-800">Total</h1>
-                <h1 id="totalAmount" class="text-xl font-semibold text-gray-800">Rp[Total Keseluruhan]
+                <h1 id="totalAmount" class="text-xl font-semibold text-gray-800">Rp{{ number_format(array_sum(array_map(fn($p) => $p['price'] * $p['quantity'], $cart)), 0, ',', '.') }}
                 </h1>
             </div>
-            {{-- <p>Tidak ada produk yang dipilih.</p> --}}
+            @else
+            <p>Tidak ada produk yang dipilih.</p>
+            @endif
             {{-- end: looping produk dari session --}}
-            
+
         </div>
 
         <div class="w-1/2 pl-6">
-            <form action="/sale/store" method="POST">
+            <form action="{{ route('sale.store') }}" method="POST">
+                @csrf
+                @method('POST')
                 {{-- start: input data sale  --}}
-                <input type="hidden" name="sale_date" value="">
+                <input type="hidden" name="sale_date" value="{{ now() }}">
                 <input type="hidden" name="total_price" id="total_price"
-                    value="">
+                    value="{{ array_sum(array_map(fn($p) => $p['price'] * $p['quantity'], $cart)) }}">
                 <input type="hidden" name="total_return" id="totalReturn" value="">
                 <input type="hidden" name="point" value="">
                 <input type="hidden" name="total_point" value="">
-                <input type="hidden" name="customer_id" value="">
-                <input type="hidden" name="user_id" value="">
+                <input type="hidden" name="customer_id" value="{{ $customer_id ?? '' }}">
+                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
                 {{-- end: input data sale  --}}
 
                 {{-- start: input data detail product  --}}
-                <input type="hidden" name="products[index][id]" value="">
-                <input type="hidden" name="products[index][name]" value="">
-                <input type="hidden" name="products[index][price]" value="">
-                <input type="hidden" name="products[index][quantity]" value="">
-                <input type="hidden" name="products[index][subtotal]" value="">
+                @foreach ($cart as $index => $product)
+                <input type="hidden" name="products[{{ $index }}][id]" value="{{ $product['id'] }}">
+                <input type="hidden" name="products[{{ $index }}][name]" value="{{ $product['name'] }}">
+                <input type="hidden" name="products[{{ $index }}][price]" value="{{ $product['price'] }}">
+                <input type="hidden" name="products[{{ $index }}][quantity]" value="{{ $product['quantity'] }}">
+                <input type="hidden" name="products[{{ $index }}][subtotal]" value="{{ $product['price'] * $product['quantity'] }}">
+                @endforeach
                 {{-- start: input data detail product --}}
 
                 <div class="flex flex-col space-y-2 mb-4">

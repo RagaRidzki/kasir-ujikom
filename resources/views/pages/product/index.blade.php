@@ -5,11 +5,12 @@
         <x-breadcrumb title="Data Produk" :paths="[['name' => 'Home', 'url' => ''], ['name' => 'Data Produk', 'url' => '']]" />
 
         <div class="w-full flex justify-between items-center mb-6">
-            <div class="relative w-96">
-                <input type="text" placeholder="Cari produk..."
+            <form method="GET" action="{{ route('product.index') }}" class="relative w-96">
+                <input type="search" name="search" placeholder="Cari produk..."
+                    value="{{ request('search') }}"
                     class="w-full border border-gray-300 rounded-md py-2 px-4 pl-10 focus:ring-2 focus:ring-blue-600 focus:outline-none">
                 <i class="ri-search-line absolute left-3 top-2.5 w-5 h-5 text-gray-400"></i>
-            </div>
+            </form>
 
             <div class="flex items-center space-x-4">
                 {{-- <div class="flex items-center space-x-2">
@@ -29,10 +30,13 @@
                     <span>Filter</span>
                 </button> --}}
 
-                <!-- Tombol Tambah Produk -->
-                <x-link-button href="/product/create" color="blue" shadow="blue">
-                    <i class="ri-add-line"></i> Tambah Produk Baru
-                </x-link-button>
+
+                @if (auth()->user()->role === 'Admin')
+                    <!-- Tombol Tambah Produk -->
+                    <x-link-button href="/product/create" color="blue" shadow="blue">
+                        <i class="ri-add-line"></i> Tambah Produk Baru
+                    </x-link-button>
+                @endif
             </div>
         </div>
 
@@ -46,7 +50,9 @@
                             <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Nama Produk</th>
                             <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Harga</th>
                             <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Stok</th>
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Action</th>
+                            @if (auth()->user()->role === 'Admin')
+                                <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -61,33 +67,36 @@
                                     Rp{{ number_format($product->price, 0, ',', '.') }}
                                 </td>
                                 <td class="py-3 px-5 border-b border-gray-300">{{ $product->stock }}</td>
-                                <td class="py-3 px-5 border-b border-gray-300">
-                                    <ul class="flex items-center space-x-3">
-                                        <li>
-                                            <a href="{{ route('product.edit', $product->id) }}"
-                                                class="text-gray-500 hover:text-gray-700">
-                                                <i class="ri-edit-line text-lg"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <button data-modal-target="updateStock-{{ $product->id }}"
-                                                data-modal-toggle="updateStock-{{ $product->id }}"
-                                                class="text-gray-500 hover:text-gray-700">
-                                                <i class="ri-loop-left-line text-lg"></i>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <form action="{{ route('product.delete', $product->id) }}" method="POST" id="delete-form-{{ $product->id }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" onclick="confirmDelete({{ $product->id }})"
+                                @if (auth()->user()->role === 'Admin')
+                                    <td class="py-3 px-5 border-b border-gray-300">
+                                        <ul class="flex items-center space-x-3">
+                                            <li>
+                                                <a href="{{ route('product.edit', $product->id) }}"
                                                     class="text-gray-500 hover:text-gray-700">
-                                                    <i class="ri-delete-bin-line text-lg"></i>
+                                                    <i class="ri-edit-line text-lg"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button data-modal-target="updateStock-{{ $product->id }}"
+                                                    data-modal-toggle="updateStock-{{ $product->id }}"
+                                                    class="text-gray-500 hover:text-gray-700">
+                                                    <i class="ri-loop-left-line text-lg"></i>
                                                 </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </td>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('product.delete', $product->id) }}" method="POST"
+                                                    id="delete-form-{{ $product->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="confirmDelete({{ $product->id }})"
+                                                        class="text-gray-500 hover:text-gray-700">
+                                                        <i class="ri-delete-bin-line text-lg"></i>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

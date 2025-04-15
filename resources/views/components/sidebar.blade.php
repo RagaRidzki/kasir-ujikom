@@ -26,13 +26,14 @@
                 <span class="text-md font-semibold">Penjualan</span>
             </a>
         </li>
+        @if (auth()->user()->role === 'Admin')
         <li class="mb-1 group {{ Request::is('user*') ? 'active' : '' }}">
             <a href="/user"
-                class="flex items-center py-2 px-4 text-textColor hover:bg-blue-100 hover:text-hoverText rounded-md group-[.active]:bg-blue-100 group-[.active]:text-hoverText">
-                <i class="ri-user-line mr-3 text-lg"></i>
-                <span class="text-md font-semibold">User</span>
-            </a>
-        </li>
+            class="flex items-center py-2 px-4 text-textColor hover:bg-blue-100 hover:text-hoverText rounded-md group-[.active]:bg-blue-100 group-[.active]:text-hoverText">
+            <i class="ri-user-line mr-3 text-lg"></i>
+            <span class="text-md font-semibold">User</span>
+        </a></li>
+        @endif
     </ul>
 </section>
 <div class="fixed top-0 left-0 w-full h-full z-40 hidden sidebar-overlay"></div>
