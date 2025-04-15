@@ -19,7 +19,7 @@
 
         <div class="flex flex-col justify-between w-full h-full md:w-1/2 bg-white p-10 lg:p-20">
             <div class="flex items-center space-x-2">
-                <img src="{{-- asset/images/wikrama --}}" alt="logo" class="w-10 h-10">
+                <img src="{{ asset('assets/images/wikrama-logo.png') }}" alt="logo" class="w-10 h-10">
                 <h1 class="text-xl font-semibold">Aplikasi Kasir</h1>
             </div>
             <div class="flex flex-col w-full">
@@ -28,7 +28,9 @@
                     <p class="text-sm">Selamat Datang! Silakan masukkan data Anda.</p>
                 </div>
 
-                <form action="/login/store" method="POST">
+                <form action="{{ route('login.store') }}" method="POST">
+                    @csrf
+                    @method('POST')
                     <div class="mb-4">
                         <label for="email" class="mb-2 block text-sm font-medium">Email</label>
                         <input type="text" name="email" id="email"

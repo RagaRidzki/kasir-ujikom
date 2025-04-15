@@ -9,7 +9,7 @@
                     class="w-8 h-8 rounded-full block object-cover align-middle mr-2">
                 <span class="text-md font-semibold text-textColor">
                     <span class="text-md font-semibold text-textColor">
-                        {{-- {{ auth()->user()->name }} --}}
+                        {{ auth()->user()->name }}
                     </span>
                 </span>
             </button>
@@ -17,6 +17,8 @@
                 class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px] absolute top-full left-0">
                 <li>
                     <form action="/logout" method="POST">
+                        @csrf
+                        @method('POST')
                         <button type="submit"
                             class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</button>
                     </form>

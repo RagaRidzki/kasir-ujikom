@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    {{-- @if (session('success'))
+    @if (session('success'))
     <script>
         Swal.fire({
             title: 'Success!',
@@ -21,7 +21,18 @@
             confirmButton: 'OK'
         })
     </script>
-    @endif --}}
+    @endif
+
+    @if (session('error'))
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: "{{ session('error') }}",
+            icon: 'error',
+            confirmButton: 'OK'
+        })
+    </script>
+    @endif
 
 
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all">
