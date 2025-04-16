@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('sale_date');
             $table->integer('total_price');
-            $table->integer('total_pay');
+            $table->bigInteger('total_pay');
             $table->integer('total_return');
             $table->integer('point')->nullable();
             $table->integer('total_point')->nullable();

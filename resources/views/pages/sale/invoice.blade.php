@@ -91,9 +91,9 @@
     <div class="container">
         <div class="header">
             <div class="store-info">
-                <h2>IPHONE STORE JAYA</h2>
-                <p>Jalan Layang Melintang</p>
-                <img src="{{ asset('assets/images/wikrama-logo.png') }}" alt="Store Logo">
+                <h2>APPLE STORE JAYA</h2>
+                <p>Jalan Layang Melintang, Tajur - Sindang Aley, Bogorian City</p>
+                {{-- <img src="{{ asset('assets/images/wikrama-logo.png') }}"> --}}
             </div>
             <div class="invoice-info">
                 <h1>Invoice - #{{ $sales->id }}</h1>
@@ -130,6 +130,7 @@
         <div class="footer">
             <div>
                 <p><strong>Cashier:</strong> {{ $sales->user->name }}</p>
+                <p><strong>Pay:</strong> Rp{{ number_format($sales->total_pay, 0, ',', '.') }}</p>
                 <p><strong>Change:</strong> Rp{{ number_format($sales->total_return, 0, ',', '.') }}</p>
             </div>
             <div class="text-right total">

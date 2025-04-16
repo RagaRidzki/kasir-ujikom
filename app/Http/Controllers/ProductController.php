@@ -12,16 +12,16 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
 
-     public function index(Request $request)
-     {
-         $search = $request->input('search');
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
 
-         $products = Product::when($search, function ($query, $search) {
-             return $query->where('name', 'like', '%' . $search . '%');
-         })->get();
+        $products = Product::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->get();
 
-         return view('pages.product.index', compact('products', 'search'));
-     }
+        return view('pages.product.index', compact('products', 'search'));
+    }
 
 
     /**
@@ -109,7 +109,8 @@ class ProductController extends Controller
         return redirect('/product')->with('success', 'Data produk berhasil diupdate');
     }
 
-    public function updateStock(Request $request, $id) {
+    public function updateStock(Request $request, $id)
+    {
         $validated = $request->validate([
             'name' => 'required',
             'stock' => 'required|numeric|min:1'

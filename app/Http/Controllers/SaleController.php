@@ -2,55 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\DetailSale;
-use Illuminate\Http\Request;
 // use Barryvdh\DomPDF\Facade as PDF;
-use PDF;
+use App\Exports\SalesExport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request, $period = null)
-{
-    // Menggunakan 'filter' dari request (bisa 'harian', 'bulanan', dll)
-    $filter = $request->input('filter', $period);
+    public function index(Request $request)
+    {
+        // $sales = Sale::all();
+        $details = DetailSale::all();
 
-    // Query dasar untuk mengambil data sales dengan relasi
-    $query = Sale::with('customer', 'user')
-        ->orderBy('id', 'desc');
+        $filterBy = $request->input('filter_by');
+        $search = $request->input('search');
 
-    // Filter berdasarkan periode yang dipilih
-    if ($filter === 'harian') {
-        $query->whereDate('sale_date', Carbon::today());
-    } elseif ($filter === 'bulanan') {
-        $query->whereBetween('sale_date', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth()
-        ]);
+        $transactions = Sale::with('user', 'customer')
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->whereHas('customer', function ($subQuery) use ($search) {
+                        $subQuery->where('name', 'like', "%{$search}%");
+                    })
+                        ->orWhere('total_price', 'like', "%{$search}%");
+
+                    if (preg_match('/^non|n\b/i', $search)) {
+                        $q->orWhereNull('customer_id');
+                    }
+                });
+            });
+
+
+        if ($filterBy === 'week') {
+            $transactions->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($filterBy === 'day') {
+            $transactions->whereDate('created_at', today());
+        } elseif ($filterBy === 'month') {
+            $transactions->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year);
+        } elseif ($filterBy === 'year') {
+            $transactions->whereYear('created_at', now()->year);
+        }
+
+        $sales = $transactions->latest()->get(); // atau ->paginate(10);
+
+        return view('pages.sale.index', compact('sales', 'details'));
     }
 
-    // Ambil data yang sudah difilter
-    $sales = $query->get();
-
-    // Return view dengan data yang sudah difilter dan periode yang aktif
-    return view('pages.sale.index', compact('sales', 'filter'));
-}
 
     public function detail(Request $request, $id)
     {
         $details = DetailSale::where('sale_id', $id)->get();
         $sales = Sale::findOrFail($id);
 
-        $pointUsed = $sales->total_point;
+        $pointUsed = $sales->point;
         $totalBeforeDiscount = $details->sum('subtotal');
         $totalAfterDiscount = $sales['total_price'];
+        $pointUsed = $totalBeforeDiscount - $totalAfterDiscount;
 
         return view('pages.sale.detail', compact('details', 'sales', 'totalBeforeDiscount', 'totalAfterDiscount', 'pointUsed'));
     }
@@ -165,12 +182,6 @@ class SaleController extends Controller
             $validated['total_point'] = 0;
         }
 
-
-
-
-
-
-
         $sale = Sale::create($validated);
 
         foreach ($request->products as $product) {
@@ -227,14 +238,15 @@ class SaleController extends Controller
         return redirect()->route('sale.detail', $sale->id);
     }
 
-    public function generatePdf($id)
+    public function generatePdf(Request $request, $id)
     {
         $details = DetailSale::where('sale_id', $id)->get();
         $sales = Sale::findOrFail($id);
 
-        $pointUsed = $sales->total_point;
+        $pointUsed = $sales->point;
         $totalBeforeDiscount = $details->sum('subtotal');
-        $totalAfterDiscount = $sales['total_price'];
+        $totalAfterDiscount = $sales->total_price;
+        $pointUsed = $totalBeforeDiscount - $totalAfterDiscount;
 
         // Tampilkan data untuk view
         $data = compact('details', 'sales', 'totalBeforeDiscount', 'totalAfterDiscount', 'pointUsed');
@@ -244,6 +256,13 @@ class SaleController extends Controller
 
         // Return the PDF file as download
         return $pdf->download('invoice_' . $sales->sale_id . '.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $filter = $request->input('filter_by');
+
+        return Excel::download(new SalesExport($filter), 'sales.xlsx');
     }
 
     /**

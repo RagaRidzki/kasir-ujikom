@@ -25,10 +25,11 @@ Route::middleware(['IsLogin'])->group(function () {
     Route::get('/product', [ProductController::class, 'index'])->name('product.index');
     Route::get('/sale', [SaleController::class, 'index'])->name('sale.index');
     Route::get('sales/generate-pdf/{id}', [SaleController::class, 'generatePdf'])->name('sales.generatePdf');
+    Route::get('/export-sales', [SaleController::class, 'exportExcel'])->name('sales.exportExcel');
 
-    Route::get('/export-sales', function () {
-        return Excel::download(new SalesExport, 'sales.xlsx');
-    })->name('sales.export');
+    // Route::get('/export-sales', function () {
+    //     return Excel::download(new SalesExport, 'sales.xlsx');
+    // })->name('sales.export');
 
 
     Route::middleware(['IsAdmin'])->group(function () {

@@ -31,7 +31,7 @@
                 @endif
             </div>
             <div class="space-x-2">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Unduh</button>
+                <a href ="{{ route('sales.generatePdf', $sales->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Unduh</a>
                 <button class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md">Kembali</button>
             </div>
         </div>
