@@ -21,10 +21,10 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        // $sales = Sale::all();
         $details = DetailSale::all();
 
         $filterBy = $request->input('filter_by');
+        $filterValue = $request->input('filter_value');
         $search = $request->input('search');
 
         $transactions = Sale::with('user', 'customer')
@@ -39,25 +39,25 @@ class SaleController extends Controller
                         $q->orWhereNull('customer_id');
                     }
                 });
+            })
+            ->when($filterBy === 'day' && $filterValue, function ($query) use ($filterValue) {
+                return $query->whereDate('created_at', Carbon::parse($filterValue));
+            })
+            // ->when($filterBy === 'week', function ($query) {
+            //     return $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            // })
+            ->when($filterBy === 'month' && $filterValue, function ($query) use ($filterValue) {
+                return $query->whereMonth('created_at', Carbon::parse($filterValue)->month)
+                    ->whereYear('created_at', Carbon::parse($filterValue)->year);
+            })
+            ->when($filterBy === 'year' && $filterValue, function ($query) use ($filterValue) {
+                return $query->whereYear('created_at', $filterValue);
             });
 
-
-        if ($filterBy === 'week') {
-            $transactions->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($filterBy === 'day') {
-            $transactions->whereDate('created_at', today());
-        } elseif ($filterBy === 'month') {
-            $transactions->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year);
-        } elseif ($filterBy === 'year') {
-            $transactions->whereYear('created_at', now()->year);
-        }
-
-        $sales = $transactions->latest()->get(); // atau ->paginate(10);
+        $sales = $transactions->latest()->get(); // bisa juga ->paginate(10);
 
         return view('pages.sale.index', compact('sales', 'details'));
     }
-
 
     public function detail(Request $request, $id)
     {
@@ -259,11 +259,13 @@ class SaleController extends Controller
     }
 
     public function exportExcel(Request $request)
-    {
-        $filter = $request->input('filter_by');
+{
+    $filterBy = $request->input('filter_by');
+    $filterValue = $request->input('filter_value');
 
-        return Excel::download(new SalesExport($filter), 'sales.xlsx');
-    }
+    return Excel::download(new SalesExport($filterBy, $filterValue), 'sales.xlsx');
+}
+
 
     /**
      * Display the specified resource.

@@ -6,34 +6,38 @@ use Carbon\Carbon;
 use App\Models\Sale;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromArray;
-// use Maatwebsite\Excel\Concerns\FromCollection;
 
 class SalesExport implements FromArray, WithHeadings
 {
-    protected $filter;
+    protected $filterBy;
+    protected $filterValue;
 
-    public function __construct($filter)
+    public function __construct($filterBy, $filterValue)
     {
-        $this->filter = $filter;
+        $this->filterBy = $filterBy;
+        $this->filterValue = $filterValue;
     }
+
     public function array(): array
     {
         $product = [];
 
         $saleQuery = Sale::with('user', 'customer');
 
-        if ($this->filter == 'day') {
-            $saleQuery->whereDate('created_at', Carbon::today());
-        } elseif ($this->filter == 'week') {
-            $saleQuery->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-        } elseif ($this->filter == 'month') {
-            $saleQuery->whereMonth('created_at', Carbon::now()->month)
-                ->whereYear('created_at', Carbon::now()->year);
-        } elseif ($this->filter == 'year') {
-            $saleQuery->whereYear('created_at', Carbon::now()->year);
+        if ($this->filterBy === 'day' && $this->filterValue) {
+            $saleQuery->whereDate('created_at', Carbon::parse($this->filterValue));
+        } elseif ($this->filterBy === 'week') {
+            $saleQuery->whereBetween('created_at', [
+                Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()
+            ]);
+        } elseif ($this->filterBy === 'month' && $this->filterValue) {
+            $saleQuery->whereMonth('created_at', Carbon::parse($this->filterValue)->month)
+                ->whereYear('created_at', Carbon::parse($this->filterValue)->year);
+        } elseif ($this->filterBy === 'year' && $this->filterValue) {
+            $saleQuery->whereYear('created_at', $this->filterValue);
         }
 
-        $sales = $saleQuery->get();
+        $sales = $saleQuery->orderBy('created_at', 'desc')->get();
 
         foreach ($sales as $sale) {
             $product[] = [
@@ -61,4 +65,3 @@ class SalesExport implements FromArray, WithHeadings
         ];
     }
 }
-

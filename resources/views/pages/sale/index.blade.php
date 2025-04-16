@@ -28,7 +28,7 @@
 
 
             <div class="flex items-center">
-                <form method="GET">
+                {{-- <form method="GET">
                     <select name="filter_by" id="filter_by" class="px-4 py-2 border rounded">
                         <option value="">-- Semua Data --</option>
                         <option value="day" {{ request('filter_by')=='day' ? 'selected' : '' }}>Harian</option>
@@ -37,7 +37,34 @@
                         <option value="year" {{ request('filter_by')=='year' ? 'selected' : '' }}>Tahunan</option>
                     </select>
                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Filter</button>
+                </form> --}}
+
+                <form method="GET" class="flex items-center gap-2">
+                    <select name="filter_by" id="filter_by" class="px-4 py-2 border rounded"
+                        onchange="this.form.submit()">
+                        <option value="">-- Semua Data --</option>
+                        <option value="day" {{ request('filter_by')=='day' ? 'selected' : '' }}>Harian</option>
+                        {{-- <option value="week" {{ request('filter_by')=='week' ? 'selected' : '' }}>Mingguan</option>
+                        --}}
+                        <option value="month" {{ request('filter_by')=='month' ? 'selected' : '' }}>Bulanan</option>
+                        <option value="year" {{ request('filter_by')=='year' ? 'selected' : '' }}>Tahunan</option>
+                    </select>
+
+                    @if(request('filter_by') == 'day')
+                    <input type="date" name="filter_value" value="{{ request('filter_value') }}"
+                        class="px-4 py-2 border rounded" required>
+                    @elseif(request('filter_by') == 'month')
+                    <input type="month" name="filter_value" value="{{ request('filter_value') }}"
+                        class="px-4 py-2 border rounded" required>
+                    @elseif(request('filter_by') == 'year')
+                    <input type="number" name="filter_value" min="2000" max="{{ now()->year }}"
+                        value="{{ request('filter_value') }}" class="px-4 py-2 border rounded"
+                        placeholder="Contoh: 2025" required>
+                    @endif
+
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Filter</button>
                 </form>
+
             </div>
 
 
@@ -46,11 +73,12 @@
                 <i class="ri-filter-line"></i>
                 <span>Filter</span>
             </button> --}}
-            <x-link-button href="{{ route('sales.exportExcel', ['filter_by' => request('filter_by')]) }}" color="green"
-                shadow="green">
-                <i class="ri-export-line"></i> Export
-                Penjualan(.xlsx)
+            <x-link-button
+                href="{{ route('sales.exportExcel') }}?filter_by={{ request('filter_by') }}&filter_value={{ request('filter_value') }}"
+                color="green" shadow="green">
+                <i class="ri-export-line"></i> Export Penjualan(.xlsx)
             </x-link-button>
+
             @if (auth()->user()->role === 'Employee')
             <x-link-button href="/sale/create" color="blue" shadow="blue">
                 <i class="ri-add-line"></i> Tambah
