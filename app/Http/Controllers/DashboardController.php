@@ -25,10 +25,13 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->get();
 
-
-        // Siapkan data untuk chart
         $labels = $sales->pluck('date');
         $dataChart = $sales->pluck('total');
+
+        $productStock = Product::select('name', 'stock')->get();
+        $productNames = $productStock->pluck('name');
+        $productQuantities = $productStock->pluck('stock');
+
 
         return view('pages.dashboard.index', compact(
             'totalSale',
@@ -36,7 +39,10 @@ class DashboardController extends Controller
             'totalProduct',
             'totalUser',
             'labels',
-            'dataChart'
+            'dataChart',
+            'productStock',
+            'productNames',
+            'productQuantities'
         ));
     }
 }

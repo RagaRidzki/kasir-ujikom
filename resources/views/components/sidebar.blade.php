@@ -2,7 +2,7 @@
     class="fixed left-0 top-0 w-64 h-full bg-white shadow-sm p-4">
     <a href="/dashboard" class="flex items-center pb-4 border-b border-b-gray-300">
         <img src="{{ asset('assets/images/wikrama-logo.png') }}" alt="logo" class="w-8 h-8 rounded object-cover">
-        <span class="text-md font-bold text-textColor ml-1">Aplikasi Kasir</span>
+        <span class="text-md font-bold text-textColor ml-1">APLIKASI KASIR</span>
     </a>
     <ul class="mt-4">
         <li class="mb-1 group {{ Request::is('dashboard*') ? 'active' : '' }}">
