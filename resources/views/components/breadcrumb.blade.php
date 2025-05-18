@@ -1,5 +1,5 @@
 <div class="mb-6">
-    <h1 class="text-2xl font-semibold text-blue-950">{{ $title }}</h1>
+    <h1 class="text-2xl font-semibold text-text-primary">{{ $title }}</h1>
     <ul class="flex items-center text-sm">
         {{-- Foreach --}}
         @foreach ($paths as $path)

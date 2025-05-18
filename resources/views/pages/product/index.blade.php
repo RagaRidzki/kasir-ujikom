@@ -2,21 +2,21 @@
 
 @section('content')
     <div class="p-6">
-        <x-breadcrumb title="Data Produk" :paths="[['name' => 'Home', 'url' => ''], ['name' => 'Data Produk', 'url' => '']]" />
+        <x-breadcrumb title="Data Produk" :paths="[['name' => 'Home', 'url' => '/dashboard'], ['name' => 'Data Produk', 'url' => '']]" />
 
         <div class="w-full flex justify-between items-center mb-6">
             <form method="GET" action="{{ route('product.index') }}" class="relative w-96">
                 <input type="search" name="search" placeholder="Cari produk..."
                     value="{{ request('search') }}"
-                    class="w-full border border-gray-300 rounded-md py-2 px-4 pl-10 focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                    class="bg-white border border-gray-200 rounded-lg px-4 py-2 pl-10 w-full focus:outline-none focus:ring-3 focus:ring-third transition">
                 <i class="ri-search-line absolute left-3 top-2.5 w-5 h-5 text-gray-400"></i>
             </form>
 
             <div class="flex items-center space-x-4">
-                {{-- <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2">
                     <span class="text-gray-600 text-sm">Showing</span>
                     <select
-                        class="border border-gray-300 bg-white text-gray-700 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        class="bg-white border border-gray-200 rounded-lg text-gray-700 px-2 py-1 text-sm w-full focus:outline-none focus:ring-3 focus:ring-third transition">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -25,10 +25,10 @@
 
                 <!-- Filter Button -->
                 <button
-                    class="flex items-center space-x-1 border border-gray-300 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 text-sm">
+                    class="flex items-center space-x-1 bg-white border border-gray-200 rounded-lg text-gray-700 px-3 py-2 text-sm focus:outline-none focus:ring-3 focus:ring-third transition">
                     <i class="ri-filter-line"></i>
                     <span>Filter</span>
-                </button> --}}
+                </button>
 
 
                 @if (auth()->user()->role === 'Admin')
@@ -40,35 +40,35 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-200 shadow-sm p-6 rounded-lg">
+        <div class="bg-white border border-gray-200 p-6 rounded-xl">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[540px] border-collapse">
                     <thead>
                         <tr class="bg-gray-50 text-left">
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">No</th>
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Gambar</th>
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Nama Produk</th>
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Harga</th>
-                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Stok</th>
+                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">No</th>
+                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">Gambar</th>
+                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">Nama Produk</th>
+                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">Harga</th>
+                            <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">Stok</th>
                             @if (auth()->user()->role === 'Admin')
-                                <th class="text-md font-semibold py-3 px-5 border-b border-gray-300">Action</th>
+                                <th class="text-md font-semibold py-3 px-5 border-b border-gray-200">Action</th>
                             @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($products as $product)
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="py-3 px-5 border-b border-gray-300">{{ $loop->iteration }}</td>
-                                <td class="py-3 px-5 border-b border-gray-300">
+                                <td class="py-3 px-5 border-b border-gray-200">{{ $loop->iteration }}</td>
+                                <td class="py-3 px-5 border-b border-gray-200">
                                     <img src="{{ 'storage/' . $product->image }}" alt="gambar" class="w-16 h-16">
                                 </td>
-                                <td class="py-3 px-5 border-b border-gray-300">{{ $product->name }}</td>
-                                <td class="py-3 px-5 border-b border-gray-300 text-green-700 font-semibold">
+                                <td class="py-3 px-5 border-b border-gray-200">{{ $product->name }}</td>
+                                <td class="py-3 px-5 border-b border-gray-200 text-green-700 font-semibold">
                                     Rp{{ number_format($product->price, 0, ',', '.') }}
                                 </td>
-                                <td class="py-3 px-5 border-b border-gray-300">{{ $product->stock }}</td>
+                                <td class="py-3 px-5 border-b border-gray-200">{{ $product->stock }}</td>
                                 @if (auth()->user()->role === 'Admin')
-                                    <td class="py-3 px-5 border-b border-gray-300">
+                                    <td class="py-3 px-5 border-b border-gray-200">
                                         <ul class="flex items-center space-x-3">
                                             <li>
                                                 <a href="{{ route('product.edit', $product->id) }}"

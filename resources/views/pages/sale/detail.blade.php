@@ -28,11 +28,14 @@
                 <p class="text-gray-500 font-semibold">{{ $sales->customer->no_hp }}</p>
                 <p class="text-gray-500">MEMBER SEJAK: {{ $sales->customer->created_at->format('d M Y') }}</p>
                 <p class="text-gray-500">MEMBER POIN: {{ $sales->customer->point }}</p>
+                @else
+                <p class="text-gray-500">STATUS: NON-MEMBER</p>
                 @endif
             </div>
             <div class="space-x-2">
-                <a href ="{{ route('sales.generatePdf', $sales->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Unduh</a>
-                <button class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md">Kembali</button>
+                <x-link-button href="{{ route('sales.generatePdf', $sales->id) }}" color="blue" shadow="blue"><i class="ri-download-line"></i> Unduh</x-link-button>
+                {{-- <a href ="{{ route('sales.generatePdf', $sales->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Unduh</a> --}}
+                <button class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"><i class="ri-arrow-go-back-line"></i>Kembali</button>
             </div>
         </div>
 
@@ -57,18 +60,18 @@
             </tbody>
         </table>
 
-        <div class="bg-gray-50 p-6 mt-6 rounded-md shadow">
-            <div class="grid grid-cols-3 gap-6 text-gray-700">
+        <div class="bg-gray-100 p-6 mt-6 rounded-md shadow">
+            <div class="flex justify-between gap-6 text-gray-700">
                 <div>
-                    <p class="font-semibold text-gray-600">POIN DIGUNAKAN</p>
+                    <p class="font-semibold text-gray-600">POIN DIGUNAKAN:</p>
                     <p class="text-lg">{{ $pointUsed }}</p>
                 </div>
                 <div>
-                    <p class="font-semibold text-gray-600">KASIR</p>
+                    <p class="font-semibold text-gray-600">KASIR:</p>
                     <p class="text-lg">{{ $sales->user->name }}</p>
                 </div>
                 <div>
-                    <p class="font-semibold text-gray-600">KEMBALIAN</p>
+                    <p class="font-semibold text-gray-600">KEMBALIAN:</p>
                     <p class="text-xl font-bold text-green-600">Rp{{ number_format($sales->total_return, 0, ',', '.') }}
                     </p>
                 </div>

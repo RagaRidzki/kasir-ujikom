@@ -19,8 +19,8 @@
 
         <div class="flex flex-col justify-between w-full h-full md:w-1/2 bg-white p-10 lg:p-20">
             <div class="flex items-center space-x-2">
-                <img src="{{ asset('assets/images/wikrama-logo.png') }}" alt="logo" class="w-10 h-10">
-                <h1 class="text-xl font-semibold">Aplikasi Kasir</h1>
+                <img src="{{ asset('assets/images/logo.png') }}" alt="logo" class="w-40">
+                {{-- <h1 class="text-xl font-semibold">Aplikasi Kasir</h1> --}}
             </div>
             <div class="flex flex-col w-full">
                 <div class="mb-8">
@@ -34,14 +34,14 @@
                     <div class="mb-4">
                         <label for="email" class="mb-2 block text-sm font-medium">Email</label>
                         <input type="text" name="email" id="email"
-                            class="w-full px-4 py-2 border rounded-lg border-[#0D151D] focus:outline-none"
-                            placeholder="Enter your email">
+                            class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                            placeholder="Masukkan email Anda">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="mb-2 block text-sm font-medium">Password</label>
                         <input type="password" name="password" id="password"
-                            class="w-full px-4 py-2 border rounded-lg border-[#0D151D] focus:outline-none"
-                            placeholder="Enter your password">
+                            class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                            placeholder="Masukkan kata sandi Anda">
                     </div>
 
 
@@ -53,7 +53,7 @@
                 </form>
             </div>
             <div class="w-full text-center">
-                <h1>© Araijitech PPLG SMK Wikrama Bogor. All Rights Reserved.</h1>
+                <h1>© 2025 Araijitech (Raga Ridzki). All Rights Reserved.</h1>
             </div>
         </div>
     </div>

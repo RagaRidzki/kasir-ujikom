@@ -8,7 +8,6 @@ use App\Models\Sale;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\DetailSale;
-// use Barryvdh\DomPDF\Facade as PDF;
 use App\Exports\SalesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,9 +42,6 @@ class SaleController extends Controller
             ->when($filterBy === 'day' && $filterValue, function ($query) use ($filterValue) {
                 return $query->whereDate('created_at', Carbon::parse($filterValue));
             })
-            // ->when($filterBy === 'week', function ($query) {
-            //     return $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-            // })
             ->when($filterBy === 'month' && $filterValue, function ($query) use ($filterValue) {
                 return $query->whereMonth('created_at', Carbon::parse($filterValue)->month)
                     ->whereYear('created_at', Carbon::parse($filterValue)->year);
@@ -95,7 +91,11 @@ class SaleController extends Controller
         $sales = Sale::findOrFail($id);
         $customers = $sales->customer_id ? Customer::find($sales->customer_id) : null;
 
-        return view('pages.sale.member', compact('details', 'sales', 'customers'));
+        $isFirstTransaction = Sale::where('customer_id', $customers->id)
+            ->where('id', '<>', $sales->id)
+            ->count() === 0;
+
+        return view('pages.sale.member', compact('details', 'sales', 'customers', 'isFirstTransaction'));
     }
 
     /**
@@ -112,21 +112,17 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $validated = $request->validate([
             'sale_date' => 'required',
             'total_price' => 'required',
             'total_pay' => 'required',
-            // 'total_return' => 'required',
-            'point' => 'nullable',
+            'used_point' => 'nullable',
             'total_point' => 'nullable',
             'customer_id' => 'nullable',
             'user_id' => 'required'
         ]);
 
         $total_return = $request->input('total_pay') - $request->input('total_price');
-
         $validated['total_return'] = $total_return;
 
         $customer_id = null;
@@ -141,29 +137,17 @@ class SaleController extends Controller
                     'point' => 0
                 ]);
             }
-
             $customer_id = $customer->id;
         }
 
         $validated['customer_id'] = $customer_id;
-
         $sales['customer_id'] = $customer_id;
 
+        $point = 0;
+        $used_point = 0;
+        $total_point = 0;
+
         $is_member = $request->member_status === 'member';
-
-
-        // if ($is_member && $customer_id) {
-        //     $point = floor($request->input('total_price') / 100);
-        //     $validated['point'] = $point;
-        //     $validated['total_point'] = $point;
-
-        //     Customer::where('id', $customer_id)->update([
-        //         'point' => DB::raw("point + $point")
-        //     ]);
-        // } else {
-        //     $validated['point'] = 0;
-        //     $validated['total_point'] = 0;
-        // }
 
         if ($is_member && $customer_id) {
             $point = floor($request->input('total_price') / 100);
@@ -171,14 +155,19 @@ class SaleController extends Controller
             $currentCustomer = Customer::find($customer_id);
             $previousPoint = $currentCustomer->point;
 
-            $validated['point'] = $point;
-            $validated['total_point'] = $previousPoint + $point;
+            // Update total point = sisa setelah dikurangi + point baru
+            $total_point = $previousPoint + $point;
 
+            // Simpan ke validated
+            $validated['used_point'] = $used_point;
+            $validated['total_point'] = $total_point;
+
+            // Update point di tabel customer
             Customer::where('id', $customer_id)->update([
-                'point' => DB::raw("point + $point")
+                'point' => $total_point
             ]);
         } else {
-            $validated['point'] = 0;
+            $validated['used_point'] = 0;
             $validated['total_point'] = 0;
         }
 
@@ -211,32 +200,42 @@ class SaleController extends Controller
         $sale = Sale::findOrFail($id);
         $customer = Customer::findOrFail($sale->customer_id);
         $usePoint = $request->has('use_point');
+
         $point = $customer->point;
-        $total = $sale->total_price;
-        $return = $sale->total_return;
+        $originalTotal = $sale->total_price;
         $pay = $sale->total_pay;
-        $discount = null;
 
         $customer->name = $request->name;
 
         if ($usePoint) {
-            if ($point >= $total) {
+            if ($point >= $originalTotal) {
                 $sale->total_price = 0;
-                $customer->point = $point - $total;
+                $sale->used_point = $originalTotal;
+                $customer->point = $point - $originalTotal;
+                $sale->total_return = $pay; // full return karena tidak bayar
             } else {
-                $discount = $sale->total_price = $total - $point;
-                $sale->total_return = $pay - $discount;
+                $discountedTotal = $originalTotal - $point;
+                $sale->total_price = $discountedTotal;
+                $sale->used_point = $point;
                 $customer->point = 0;
-                $sale->point = 0;
+                $sale->total_return = $pay - $discountedTotal;
             }
+        } else {
+            $sale->used_point = 0;
+            $sale->total_return = $pay - $sale->total_price;
         }
 
+        // Simpan poin akhir customer ke total_point di tabel sales
+        // $sale->total_point = $customer->point;
 
         $customer->save();
         $sale->save();
 
         return redirect()->route('sale.detail', $sale->id);
     }
+
+
+
 
     public function generatePdf(Request $request, $id)
     {
@@ -259,12 +258,12 @@ class SaleController extends Controller
     }
 
     public function exportExcel(Request $request)
-{
-    $filterBy = $request->input('filter_by');
-    $filterValue = $request->input('filter_value');
+    {
+        $filterBy = $request->input('filter_by');
+        $filterValue = $request->input('filter_value');
 
-    return Excel::download(new SalesExport($filterBy, $filterValue), 'sales.xlsx');
-}
+        return Excel::download(new SalesExport($filterBy, $filterValue), 'sales.xlsx');
+    }
 
 
     /**

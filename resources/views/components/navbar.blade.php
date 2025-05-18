@@ -1,4 +1,4 @@
-<div class="py-4 px-6 bg-white flex items-center shadow-sm sticky top-0 left-0 z-30">
+<div class="py-4 px-6 bg-white flex items-center border-b border-b-gray-200 sticky top-0 left-0 z-30">
     <a href="#" class="text-lg text-gray-600 sidebar-toggle">
         <i class="ri-menu-line"></i>
     </a>
@@ -7,8 +7,8 @@
             <button type="button" id="dropdownButton" class="dropdown-toggle flex items-center">
                 <img src="https://placehold.co/30x30" alt=""
                     class="w-8 h-8 rounded-full block object-cover align-middle mr-2">
-                <span class="text-md font-semibold text-textColor">
-                    <span class="text-md font-semibold text-textColor">
+                <span class="text-md font-semibold text-text-primary">
+                    <span class="text-md font-semibold text-text-primary">
                         {{ auth()->user()->name }}
                     </span>
                 </span>

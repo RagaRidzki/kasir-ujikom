@@ -14,7 +14,7 @@ class Sale extends Model
         'total_price',
         'total_pay',
         'total_return',
-        'point',
+        'use_point  ',
         'total_point',
         'customer_id',
         'user_id'

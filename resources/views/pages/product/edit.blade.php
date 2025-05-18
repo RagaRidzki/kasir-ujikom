@@ -8,7 +8,7 @@
             ['name' => 'Edit Data Produk', 'url' => ''],
         ]" />
 
-        <div class="mb-6 bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+        <div class="bg-white border border-gray-200 p-6 rounded-xl">
             <form action="{{ route('product.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="w-full">
                 @csrf
                 @method('PUT')
@@ -17,7 +17,7 @@
                         <label for="name" class="block text-gray-600 font-semibold mb-2">Nama Produk <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="name" name="name"
-                            class="block w-full border border-gray-300 focus:outline-none focus:border-gray-700 py-2 px-4 rounded-md placeholder-gray-400"
+                            class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400"
                             value="{{ old('name', $product->name) }}">
                         @error('name')
                             <p class="text-red-500 text-sm mt-1"> </p>
@@ -27,7 +27,7 @@
                         <label for="price" class="block text-gray-600 font-semibold mb-2">Harga <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="price" name="price"
-                            class="block w-full border border-gray-300 focus:outline-none focus:border-gray-600 py-2 px-4 rounded-md placeholder-gray-400"
+                            class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400"
                             value="{{ old('price', $product->price) }}">
                         @error('price')
                             <p class="text-red-500 text-sm mt-1"> </p>
@@ -42,7 +42,7 @@
                     <div class="w-full mb-4">
                         <label for="image" class="block text-gray-600 font-semibold mb-2">Gambar</label>
                         <input type="file" id="image" name="image"
-                            class="block w-full border border-gray-300 focus:outline-none focus:border-gray-600 py-2 px-4 rounded-md placeholder-gray-400">
+                            class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400">
                     </div>
                     <div class="w-full mb-4">
                         <label class="block text-gray-600 font-semibold mb-2">Gambar Sebelumnya:</label>
