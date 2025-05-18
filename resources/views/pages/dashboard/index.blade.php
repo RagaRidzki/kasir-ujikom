@@ -4,7 +4,8 @@
 <div class="p-6">
     <div class="flex justify-between mb-6">
         <div class="flex flex-col">
-            <h1 class="text-2xl font-semibold text-text-primary">Selamat datang, {{ auth()->user()->name }}</h1>
+            <h1 class="text-xl lg:text-2xl font-semibold text-text-primary">Selamat datang, {{ auth()->user()->name }}
+            </h1>
             <ul class="flex items-center text-sm">
                 <li class="mr-2">
                     <a href="" class="text-gray-400 hover:text-gray-600 font-medium">Home</a>
@@ -15,7 +16,7 @@
                 </li>
             </ul>
         </div>
-        <div id="clock" class="flex justify-center items-center text-sm text-gray-600 font-mono"></div>
+        <div id="clock" class="flex justify-center items-center text-xs lg:text-sm text-gray-600 font-mono"></div>
     </div>
     {{-- If admin --}}
     @if (auth()->user()->role === 'Admin')
@@ -40,14 +41,28 @@
         </div>
     </div>
 
-    <div class="mb-6 grid grid-cols-2 gap-6">
+    <div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+
+        <!-- Card #1 -->
         <div class="bg-white border border-gray-200 p-6 rounded-xl">
-            <canvas id="barChart"></canvas>
+            <div class="overflow-x-auto">
+                <div class="min-w-[300px] sm:min-w-[400px] md:min-w-[500px]">
+                    <canvas id="barChart" class="w-full h-full"></canvas>
+                </div>
+            </div>
         </div>
+
+        <!-- Card #2 -->
         <div class="bg-white border border-gray-200 p-6 rounded-xl">
-            <canvas id="bar2Chart"></canvas>
+            <div class="overflow-x-auto">
+                <div class="min-w-[300px] sm:min-w-[400px] md:min-w-[500px]">
+                    <canvas id="bar2Chart" class="w-full h-full"></canvas>
+                </div>
+            </div>
         </div>
+
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -173,23 +188,28 @@
         });
     </script>
 
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        <!-- Card 1 -->
         <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col justify-between">
             <!-- Header -->
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
                 <h1 class="text-xl font-semibold flex items-center gap-2 text-gray-800">
                     Total Penjualan Hari Ini
                 </h1>
             </div>
 
             <!-- Total Nominal -->
-            <div class="text-3xl font-bold text-gray-900">Rp{{ number_format($totalTurnDay, 0, ',', '.') }}</div>
+            <div class="text-3xl font-bold text-gray-900 mb-2">
+                Rp{{ number_format($totalTurnDay, 0, ',', '.') }}
+            </div>
 
             <!-- Jumlah Transaksi -->
-            <p class="text-sm text-gray-500 mb-4">{{ $totalSaleDay }} Transaksi</p>
+            <p class="text-sm text-gray-500 mb-4">
+                {{ $totalSaleDay }} Transaksi
+            </p>
 
             <!-- Persentase Perubahan -->
-            <div class="flex items-center gap-2 text-sm">
+            <div class="flex items-center gap-2 text-sm mb-4">
                 @if ($percentageChange >= 0)
                 <span class="text-green-600 font-medium">+{{ number_format($percentageChange, 0) }}%</span>
                 @else
@@ -199,7 +219,7 @@
             </div>
 
             <!-- Progress Bar -->
-            <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="w-full bg-gray-100 rounded-full h-2 mb-4">
                 <div class="bg-secondary h-2 rounded-full" style="width: {{ intval($percentageChange) }}%"></div>
             </div>
 
@@ -209,79 +229,94 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-200 p-6 rounded-xl">
-            <div class="flex items-center justify-between mb-4">
+        <!-- Card 2 -->
+        <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
                 <h1 class="text-xl font-semibold flex items-center gap-2 text-text-primary">
                     Omzet Penjualan
                 </h1>
             </div>
 
-            <!-- Filter Type Selector -->
-            <form method="GET" class="items-center gap-2">
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-text-secondary">Tampilkan berdasarkan:</label>
+            <form method="GET" class="flex flex-col gap-4 flex-1">
+                <!-- Filter Type -->
+                <div>
+                    <label for="filter_by" class="block mb-2 text-sm font-medium text-text-secondary">
+                        Tampilkan berdasarkan:
+                    </label>
                     <select name="filter_by" id="filter_by"
-                        class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition" onchange="this.form.submit()">
-                        <option value="day" value="day" {{ request('filter_by') == 'day' ? 'selected' : '' }}>Per Hari</option>
-                        <option value="month" value="month" {{ request('filter_by') == 'month' ? 'selected' : '' }}>Per Bulan</option>
-                        <option value="year" value="year" {{ request('filter_by') == 'year' ? 'selected' : '' }}>Per Tahun</option>
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                        onchange="this.form.submit()">
+                        <option value="day" {{ request('filter_by')=='day' ? 'selected' : '' }}>Per Hari</option>
+                        <option value="month" {{ request('filter_by')=='month' ? 'selected' : '' }}>Per Bulan</option>
+                        <option value="year" {{ request('filter_by')=='year' ? 'selected' : '' }}>Per Tahun</option>
                     </select>
                 </div>
 
                 <!-- Dynamic Date Input -->
-                <div class="mb-4">
+                <div>
                     <label class="block mb-2 text-sm font-medium text-text-secondary">Pilih Tanggal:</label>
                     @if(request('filter_by') == 'day')
                     <input type="date" name="filter_value" value="{{ request('filter_value') }}"
-                        class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                         required>
                     @elseif(request('filter_by') == 'month')
                     <input type="month" name="filter_value" value="{{ request('filter_value') }}"
-                        class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                         required>
                     @elseif(request('filter_by') == 'year')
-                    <input type="year" name="filter_value" min="2000" max="{{ now()->year }}"
-                        value="{{ request('filter_value') }}"
-                        class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
-                        placeholder="Contoh: 2025" required>
+                    <input type="number" name="filter_value" min="2000" max="{{ now()->year }}"
+                        value="{{ request('filter_value') }}" placeholder="Contoh: 2025"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                        required>
                     @endif
                 </div>
 
-                <!-- Omzet Display -->
-                <div class="flex justify-between items-center">
-                    <div id="omzetDisplay" class="text-xl font-bold text-text-pr">
+                <!-- Omzet & Button -->
+                <div class="flex flex-row items-center justify-between mt-auto">
+                    <div id="omzetDisplay" class="text-xl font-bold text-text-pr mb-3 sm:mb-0">
                         Rp{{ number_format($omzet, 0, ',', '.') }}
                     </div>
-
                     <button type="submit"
-                        class="flex items-center space-x-1 bg-white border border-gray-200 rounded-lg text-gray-700 px-3 py-2 text-sm focus:outline-none focus:ring-3 focus:ring-third transition cursor-pointer">
+                        class="flex items-center space-x-1 bg-white border border-gray-200 rounded-lg text-gray-700 px-3 py-2 text-sm focus:outline-none focus:ring-3 focus:ring-third transition">
                         <i class="ri-filter-line"></i>
                         <span>Filter</span>
                     </button>
+                </div>
             </form>
         </div>
 
+        <!-- Card 3 -->
+        <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col">
+            <h1 class="mb-4 text-xl font-semibold text-text-primary">Data Penjualan Terbaru</h1>
+            <div class="flex flex-col divide-y divide-gray-100">
+                @foreach ($salesLatest as $sale)
+                <div class="py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                    <div>
+                        <h4 class="text-md font-semibold text-text-primary">
+                            {{ $sale->customer->name ?? 'NON-MEMBER' }}
+                        </h4>
+                        <p class="text-text-secondary text-sm">
+                            {{ $sale->created_at->format('j M Y, H:i') }}
+                        </p>
+                    </div>
+                    <div class="mt-2 sm:mt-0">
+                        <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-500 rounded-full">
+                            Rp{{ number_format($sale->total_price, 0, ',', '.') }}
+                        </span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="mt-4 text-right">
+                <a href="{{ route('sale.index') }}"
+                    class="font-semibold text-sm hover:underline inline-flex items-center gap-1">
+                    <span>Lihat Semua</span>
+                    <i class="ri-arrow-right-long-line"></i>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-xl">
-        <h1 class="mb-2 text-xl font-semibold text-text-primary">Data Penjualan Terbaru</h1>
-        @foreach ($salesLatest as $sale)
-        <div class="mt-4 flex justify-between">
-            <div class="flex flex-col">
-                <h4 class="text-md font-semibold text-text-primary">{{ $sale->customer->name ?? 'NON-MEMBER' }}</h4>
-                <p class="text-text-secondary text-sm">{{ $sale->created_at->format('j M Y, H:i') }}</p>
-            </div>
-            <div class="flex justify-center items-center">
-                <h1 class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-500 rounded-full">Rp{{
-                    number_format($sale->total_price, 0, ',', '.') }}</h1>
-            </div>
-        </div>
-        @endforeach
-        <div class="flex justify-end align-bottom mt-4">
-            <a href="{{ route('sale.index') }}" class="font-semibold hover:underline">Lihat Semua <i
-                    class="ri-arrow-right-long-line"></i></a>
-        </div>
-    </div>
 </div>
 
 
@@ -300,23 +335,28 @@
     </div>
 </div>
 
-<div class="grid grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+    <!-- Card 1 -->
     <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col justify-between">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
             <h1 class="text-xl font-semibold flex items-center gap-2 text-gray-800">
                 Total Penjualan Hari Ini
             </h1>
         </div>
 
         <!-- Total Nominal -->
-        <div class="text-3xl font-bold text-gray-900">Rp{{ number_format($totalTurnDay, 0, ',', '.') }}</div>
+        <div class="text-3xl font-bold text-gray-900 mb-2">
+            Rp{{ number_format($totalTurnDay, 0, ',', '.') }}
+        </div>
 
         <!-- Jumlah Transaksi -->
-        <p class="text-sm text-gray-500 mb-4">{{ $totalSaleDay }} Transaksi</p>
+        <p class="text-sm text-gray-500 mb-4">
+            {{ $totalSaleDay }} Transaksi
+        </p>
 
         <!-- Persentase Perubahan -->
-        <div class="flex items-center gap-2 text-sm">
+        <div class="flex items-center gap-2 text-sm mb-4">
             @if ($percentageChange >= 0)
             <span class="text-green-600 font-medium">+{{ number_format($percentageChange, 0) }}%</span>
             @else
@@ -326,7 +366,7 @@
         </div>
 
         <!-- Progress Bar -->
-        <div class="w-full bg-gray-100 rounded-full h-2">
+        <div class="w-full bg-gray-100 rounded-full h-2 mb-4">
             <div class="bg-secondary h-2 rounded-full" style="width: {{ intval($percentageChange) }}%"></div>
         </div>
 
@@ -336,77 +376,91 @@
         </div>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-xl">
-        <div class="flex items-center justify-between mb-4">
+    <!-- Card 2 -->
+    <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
             <h1 class="text-xl font-semibold flex items-center gap-2 text-text-primary">
                 Omzet Penjualan
             </h1>
         </div>
 
-        <!-- Filter Type Selector -->
-        <form method="GET" class="items-center gap-2">
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-text-secondary">Tampilkan berdasarkan:</label>
+        <form method="GET" class="flex flex-col gap-4 flex-1">
+            <!-- Filter Type -->
+            <div>
+                <label for="filter_by" class="block mb-2 text-sm font-medium text-text-secondary">
+                    Tampilkan berdasarkan:
+                </label>
                 <select name="filter_by" id="filter_by"
-                    class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition" onchange="this.form.submit()">
-                    <option value="day" value="day" {{ request('filter_by') == 'day' ? 'selected' : '' }}>Per Hari</option>
-                    <option value="month" value="month" {{ request('filter_by') == 'month' ? 'selected' : '' }}>Per Bulan</option>
-                    <option value="year" value="year" {{ request('filter_by') == 'year' ? 'selected' : '' }}>Per Tahun</option>
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                    onchange="this.form.submit()">
+                    <option value="day" {{ request('filter_by')=='day' ? 'selected' : '' }}>Per Hari</option>
+                    <option value="month" {{ request('filter_by')=='month' ? 'selected' : '' }}>Per Bulan</option>
+                    <option value="year" {{ request('filter_by')=='year' ? 'selected' : '' }}>Per Tahun</option>
                 </select>
             </div>
 
             <!-- Dynamic Date Input -->
-            <div class="mb-4">
+            <div>
                 <label class="block mb-2 text-sm font-medium text-text-secondary">Pilih Tanggal:</label>
                 @if(request('filter_by') == 'day')
                 <input type="date" name="filter_value" value="{{ request('filter_value') }}"
-                    class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                    class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                     required>
                 @elseif(request('filter_by') == 'month')
                 <input type="month" name="filter_value" value="{{ request('filter_value') }}"
-                    class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
+                    class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                     required>
                 @elseif(request('filter_by') == 'year')
-                <input type="year" name="filter_value" min="2000" max="{{ now()->year }}"
-                    value="{{ request('filter_value') }}"
-                    class="bg-white border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-3 focus:ring-third transition"
-                    placeholder="Contoh: 2025" required>
+                <input type="number" name="filter_value" min="2000" max="{{ now()->year }}"
+                    value="{{ request('filter_value') }}" placeholder="Contoh: 2025"
+                    class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                    required>
                 @endif
             </div>
 
-            <!-- Omzet Display -->
-            <div class="flex justify-between items-center">
-                <div id="omzetDisplay" class="text-xl font-bold text-text-pr">
+            <!-- Omzet & Button -->
+            <div class="flex flex-row items-center justify-between mt-auto">
+                <div id="omzetDisplay" class="text-xl font-bold text-text-pr mb-3 sm:mb-0">
                     Rp{{ number_format($omzet, 0, ',', '.') }}
                 </div>
-
                 <button type="submit"
-                    class="flex items-center space-x-1 bg-white border border-gray-200 rounded-lg text-gray-700 px-3 py-2 text-sm focus:outline-none focus:ring-3 focus:ring-third transition cursor-pointer">
+                    class="flex items-center space-x-1 bg-white border border-gray-200 rounded-lg text-gray-700 px-3 py-2 text-sm focus:outline-none focus:ring-3 focus:ring-third transition">
                     <i class="ri-filter-line"></i>
                     <span>Filter</span>
                 </button>
+            </div>
         </form>
     </div>
 
-</div>
-
-<div class="bg-white border border-gray-200 p-6 rounded-xl">
-    <h1 class="mb-2 text-xl font-semibold text-text-primary">Data Penjualan Terbaru</h1>
-    @foreach ($salesLatest as $sale)
-    <div class="mt-4 flex justify-between">
-        <div class="flex flex-col">
-            <h4 class="text-md font-semibold text-text-primary">{{ $sale->customer->name ?? 'NON-MEMBER' }}</h4>
-            <p class="text-text-secondary text-sm">{{ $sale->created_at->format('j M Y, H:i') }}</p>
+    <!-- Card 3 -->
+    <div class="bg-white border border-gray-200 p-6 rounded-xl flex flex-col">
+        <h1 class="mb-4 text-xl font-semibold text-text-primary">Data Penjualan Terbaru</h1>
+        <div class="flex flex-col divide-y divide-gray-100">
+            @foreach ($salesLatest as $sale)
+            <div class="py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                <div>
+                    <h4 class="text-md font-semibold text-text-primary">
+                        {{ $sale->customer->name ?? 'NON-MEMBER' }}
+                    </h4>
+                    <p class="text-text-secondary text-sm">
+                        {{ $sale->created_at->format('j M Y, H:i') }}
+                    </p>
+                </div>
+                <div class="mt-2 sm:mt-0">
+                    <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-500 rounded-full">
+                        Rp{{ number_format($sale->total_price, 0, ',', '.') }}
+                    </span>
+                </div>
+            </div>
+            @endforeach
         </div>
-        <div class="flex justify-center items-center">
-            <h1 class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-500 rounded-full">Rp{{
-                number_format($sale->total_price, 0, ',', '.') }}</h1>
+        <div class="mt-4 text-right">
+            <a href="{{ route('sale.index') }}"
+                class="font-semibold text-sm hover:underline inline-flex items-center gap-1">
+                <span>Lihat Semua</span>
+                <i class="ri-arrow-right-long-line"></i>
+            </a>
         </div>
-    </div>
-    @endforeach
-    <div class="flex justify-end align-bottom mt-4">
-        <a href="{{ route('sale.index') }}" class="font-semibold hover:underline">Lihat Semua <i
-                class="ri-arrow-right-long-line"></i></a>
     </div>
 </div>
 
