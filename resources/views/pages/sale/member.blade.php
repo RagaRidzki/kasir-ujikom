@@ -79,9 +79,13 @@
 
                 <!-- Gunakan Poin -->
                 <div class="flex items-center space-x-2">
-                    <input type="checkbox" name="use_point" value="1" id="usePoints" class="rounded-sm">
+                    <input type="checkbox" name="use_point" value="1" id="usePoints" class="rounded-sm" {{
+                        $isFirstTransaction ? 'disabled' : '' }}>
                     <label for="usePoints" class="text-sm text-gray-600">Gunakan poin</label>
                 </div>
+                @if($isFirstTransaction)
+                <p class="text-xs text-red-500">Poin tidak bisa dipakai di transaksi pertama</p>
+                @endif
 
                 <!-- Tombol Selanjutnya -->
                 <x-button type="submit">

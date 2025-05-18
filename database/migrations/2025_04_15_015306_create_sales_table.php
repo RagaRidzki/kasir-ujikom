@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('total_price');
             $table->bigInteger('total_pay');
             $table->integer('total_return');
-            $table->integer('point')->nullable();
+            $table->integer('used_point')->nullable();
             $table->integer('total_point')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('user_id');
