@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css')
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <title>Login Page</title>
 </head>
 
-<body class="flex items-center justify-center h-screen bg-gray-100">
+<body class="font-outfit flex items-center justify-center h-screen bg-gray-100">
     <div class="flex flex-col md:flex-row w-full h-screen">
         <div class="hidden w-full md:flex md:w-1/2 items-center justify-center p-6 md:p-10">
             <dotlottie-player src="https://lottie.host/800214b0-0397-4470-be38-12c7206d4f6d/eeo75nTwGM.lottie"
@@ -46,7 +49,7 @@
 
 
                     <button type="submit"
-                        class="w-full py-3 text-white transition duration-300 bg-[#4A6CD1] rounded-lg cursor-pointer hover:bg-[#3A5BB5]">
+                        class="w-full py-3 text-white transition duration-300 bg-secondary rounded-lg cursor-pointer hover:bg-[#2f47e0]">
                         Login
                     </button>
 
