@@ -255,7 +255,11 @@
                 <!-- Dynamic Date Input -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-text-secondary">Pilih Tanggal:</label>
-                    @if(request('filter_by') == 'day')
+                    @if(request('filter_by') == '')
+                    <input type="date" name="filter_value" value="{{ request('filter_value') }}"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                        required>
+                    @elseif(request('filter_by') == 'day')
                     <input type="date" name="filter_value" value="{{ request('filter_value') }}"
                         class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                         required>
@@ -402,7 +406,11 @@
             <!-- Dynamic Date Input -->
             <div>
                 <label class="block mb-2 text-sm font-medium text-text-secondary">Pilih Tanggal:</label>
-                @if(request('filter_by') == 'day')
+                @if(request('filter_by') == '')
+                    <input type="date" name="filter_value" value="{{ request('filter_value') }}"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
+                        required>
+                @elseif(request('filter_by') == 'day')
                 <input type="date" name="filter_value" value="{{ request('filter_value') }}"
                     class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition"
                     required>
