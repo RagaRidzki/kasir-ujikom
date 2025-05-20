@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <title>Invoice - #{{ $sales->sale_id }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Outfit, sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -91,8 +94,8 @@
     <div class="container">
         <div class="header">
             <div class="store-info">
-                <h2>APPLE STORE JAYA</h2>
-                <p>Jalan Layang Melintang, Tajur - Sindang Aley, Bogorian City</p>
+                <h2>APPLEVERSE</h2>
+                <p>Jalan Galaksi, Bima Sakti, Milkyway City</p>
                 {{-- <img src="{{ asset('assets/images/wikrama-logo.png') }}"> --}}
             </div>
             <div class="invoice-info">

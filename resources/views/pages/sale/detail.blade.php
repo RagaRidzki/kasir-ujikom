@@ -19,7 +19,7 @@
         </ul>
     </div>
 
-    <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+    <div class="bg-white border border-gray-200 p-6 rounded-xl">
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-xl font-semibold text-gray-800">Invoice - #{{ $details->first()->sale_id }}</h1>

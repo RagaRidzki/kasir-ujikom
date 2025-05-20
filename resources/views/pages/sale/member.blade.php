@@ -8,28 +8,28 @@
             ['name' => 'Member', 'url' => ''],
         ]" />
 
-    <div class="flex gap-20 bg-white border border-gray-200 shadow-sm p-6 rounded-lg">
+    <div class="flex gap-20 bg-white border border-gray-200 p-6 rounded-xl">
         <!-- Bagian Kiri: Tabel Produk -->
         <div class="w-1/2">
             <div class="overflow-x-auto">
                 {{-- @if (!empty($cart)) --}}
-                <table class="w-full border-collapse bg-white border border-gray-200 shadow-sm rounded-lg">
+                <table class="w-full border-collapse bg-white border border-gray-200 p-6 rounded-xl">
                     <thead>
                         <tr class="bg-gray-50 text-left">
-                            <th class="p-3 text-left text-md font-semibold">Nama Produk</th>
-                            <th class="p-3 text-center text-md font-semibold">QTY</th>
-                            <th class="p-3 text-right text-md font-semibold">Harga</th>
-                            <th class="p-3 text-right text-md font-semibold">Sub Total</th>
+                            <th class="p-3 border-b border-gray-200 text-left text-md font-semibold">Nama Produk</th>
+                            <th class="p-3 border-b border-gray-200 text-center text-md font-semibold">QTY</th>
+                            <th class="p-3 border-b border-gray-200 text-right text-md font-semibold">Harga</th>
+                            <th class="p-3 border-b border-gray-200 text-right text-md font-semibold">Sub Total</th>
                         </tr>
                     </thead>
                     {{-- Tampilkan data produk --}}
                     @foreach ($details as $detail)
                     <tbody>
                         <tr class="border-t border-b">
-                            <td class="p-3">{{ $detail->product->name }}</td>
-                            <td class="p-3 text-center">{{ $detail->quantity }}</td>
-                            <td class="p-3 text-right">Rp{{ number_format($detail->product->price,0,',','.') }}</td>
-                            <td class="p-3 text-right">Rp{{ number_format($detail->product->price *
+                            <td class="p-3 border-b border-gray-200">{{ $detail->product->name }}</td>
+                            <td class="p-3 border-b border-gray-200 text-center">{{ $detail->quantity }}</td>
+                            <td class="p-3 border-b border-gray-200 text-right">Rp{{ number_format($detail->product->price,0,',','.') }}</td>
+                            <td class="p-3 border-b border-gray-200 text-right">Rp{{ number_format($detail->product->price *
                                 $detail->quantity,0,',','.') }}</td>
                         </tr>
                     </tbody>
@@ -65,7 +65,7 @@
                 <div class="flex flex-col space-y-1">
                     <label class="text-sm text-gray-600" for="memberName">Nama Member (Identitas)</label>
                     <input type="text" id="memberName" name="name"
-                        class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:outline-none focus:ring-gray-400"
+                        class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400"
                         value="{{ $customers->name ?? '' }}" required>
                 </div>
 
@@ -73,7 +73,7 @@
                 <div class="flex flex-col space-y-1">
                     <label class="text-sm text-gray-600" for="poin">Poin</label>
                     <input type="text" id="poin"
-                        class="w-full border border-gray-300 bg-gray-200 text-gray-500 rounded-md p-2"
+                        class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400 bg-gray-200 text-gray-500 "
                         value="{{ $customers->point ?? 0 }}" readonly disabled>
                 </div>
 

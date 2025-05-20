@@ -5,7 +5,7 @@
         <x-breadcrumb title="Data User" :paths="[['name' => 'Home', 'url' => ''], ['name' => 'Data User', 'url' => '']]" />
 
             <div class="w-full flex justify-between items-center mb-6">
-                <form method="GET" action="" class="relative w-96">
+                <form method="GET" action="" class="relative w-70">
                     <input type="search" name="search" placeholder="Cari user..."
                         value="{{ request('search') }}"
                         class="bg-white border border-gray-200 rounded-lg px-4 py-2 pl-10 w-full focus:outline-none focus:ring-3 focus:ring-third transition">

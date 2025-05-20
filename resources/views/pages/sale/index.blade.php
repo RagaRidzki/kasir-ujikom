@@ -6,7 +6,7 @@
         :paths="[['name' => 'Home', 'url' => ''], ['name' => 'Data Penjualan', 'url' => '']]" />
 
     <div class="w-full flex justify-between items-center mb-6">
-        <div class="relative w-96">
+        <div class="relative w-70">
             <form method="GET">
                 <input type="text" name="search" placeholder="Cari penjualan..." value="{{ request('search') }}"
                     class="bg-white border border-gray-200 rounded-lg px-4 py-2 pl-10 w-full focus:outline-none focus:ring-3 focus:ring-third transition">

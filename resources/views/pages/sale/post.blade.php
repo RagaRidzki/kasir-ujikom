@@ -19,7 +19,7 @@
         </ul>
     </div>
 
-    <div class="flex justify-between mb-6 bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+    <div class="flex justify-between mb-6 bg-white border border-gray-200 p-6 rounded-xl">
         <div class="w-1/2 pr-12">
             <h1 class="text-xl font-semibold mb-2">Produk yang dipilih</h1>
 
@@ -74,7 +74,7 @@
                     <label class="text-sm text-gray-500">Member status <span class="text-red-500">Dapat juga membuat
                             member</span></label>
                     <select name="member_status" id="memberStatus"
-                        class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:outline-none focus:ring-gray-400">
+                        class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400">
                         <option value="non-member">Bukan member</option>
                         <option value="member">Member</option>
                     </select>
@@ -83,12 +83,12 @@
                     <label class="text-sm text-gray-500">No Telepon <span class="text-red-500">(daftar/gunakan
                             member)</span></label>
                     <input type="number" name="no_hp"
-                        class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:outline-none focus:ring-gray-400">
+                        class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400">
                 </div>
                 <div class="flex flex-col space-y-2 mb-4">
                     <label class="text-sm text-gray-500" for="totalPay">Total Bayar</label>
                     <input type="text" id="totalPayment"
-                        class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:outline-none focus:ring-gray-400"
+                        class="block w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-3 focus:ring-third transition placeholder-gray-400"
                         inputmode="numeric" required>
                     <input type="hidden" id="totalPaymentRaw" name="total_pay">
                     <p id="alertText" class="text-red-500 text-sm hidden">Jumlah bayar kurang</p>

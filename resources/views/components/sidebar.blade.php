@@ -1,4 +1,4 @@
-<section id="sidebar" class="fixed left-0 top-0 h-full bg-gray border-r border-r-gray-200 p-4 w-64 transition-all duration-300 overflow-hidden">
+<section id="sidebar" class="fixed left-0 top-0 h-full bg-gray border-r border-gray-200 p-4 w-64 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 lg:block hidden">
     <a href="/dashboard" class="flex items-center pb-4 border-b border-b-gray-200">
         <img src="{{ asset('assets/images/logo.png') }}" alt="logo"
             class="w-40 rounded object-cover transition-all duration-300">
@@ -53,4 +53,7 @@
         @endif
     </ul>
 </section>
-<div class="fixed inset-0 bg-black/50 z-40 hidden sidebar-overlay"></div>
+<div
+  class="fixed inset-0 bg-black/50 z-40 hidden sidebar-overlay md:hidden"
+  id="overlay"
+></div>

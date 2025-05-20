@@ -22,10 +22,10 @@
     <form action="{{ route('sale.session') }}" method="POST">
         @csrf
         @method('POST')
-        <div class="mb-6 bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+        <div class="mb-6 bg-white border border-gray-200 p-6 rounded-xl">
             <div class="grid grid-cols  -1 md:grid-cols-3 gap-6 p-6">
                 @foreach ($products as $product)
-                <div class="bg-white p-6 rounded-xl border border-gray-200 text-center">
+                <div class="bg-white p-6 rounded-lg border border-gray-200 text-center">
                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-40 h-40 mx-auto mb-4">
                     <h1 class="text-lg font-semibold">{{ $product->name }}</h1>
                     <p class="text-gray-500 text-sm" data-stock="{{ $product->id }}">Stok {{ $product->stock }}</p>
